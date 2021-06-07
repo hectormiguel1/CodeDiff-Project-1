@@ -16,7 +16,8 @@ Write a turotial that another developer could follow. We recommend the following
 
 Show how to set up the required classes and stub all the method
 
-```java class Box<T> {
+```java 
+class Box<T> {
 
     private List<T> stuff;
     private boolean isStored;
@@ -26,7 +27,9 @@ Show how to set up the required classes and stub all the method
     public void store(){}
     public void unstore(){}
 
-}```
+}
+```
+
 One method at a time, provide a decription and implement.
 
 // Pack allows us to add more things into the box so long as the box is not currently stored
