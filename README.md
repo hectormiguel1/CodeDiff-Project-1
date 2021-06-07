@@ -31,20 +31,25 @@ class Box<T> {
 ```
 
 One method at a time, provide a decription and implement.
-
+```java
 // Pack allows us to add more things into the box so long as the box is not currently stored
 public void pack(T t){
     if(!this.isStored){
         this.stuff.add(t);
     }
 }
+```
+
 Demonstrate the usage of the Data Structure with a few examples
 
+```java
 Box<String> summerClothes = new Box<>();
 summerClothes.pack("Swimming Trunks");
 summerClothes.pack("Bucket Hat");
 summerClothes.store();
 summerClothes.pack("Flippy Floppies"); // Can't add because the box has already been stored!!!
+```
+
 You can build your tutorial with the tool of your choosing so long as you can show text, code, images, etc. We reccomend using a markdown file but a website or Word document will also work.
 
 Presentation
