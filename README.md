@@ -8,7 +8,7 @@ How it works/stores data
 How a client interacts with it (interface)
 The pros and cons of using the data structure
 The space and time complexity of its behavior
-# Box Data Structure
+# HashMap
 
 The Box Data stucture works by holding whatever information you want and allowing you to stick the box in either the attic or basement. A client can use the `pack()` and `unpack()` methods to put data into and remove from the box. They can also use the `store()` and `unstore()` methods to store it in or remove it from they room they are storing it in. The box provides the benefit of combining like items but has the disadvantage of taking up space and increase the risk of forgeting what is in the box. All the actions run in constant time.
 Tutorial
