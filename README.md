@@ -11,8 +11,8 @@ Research about your Data Structure. You should know:
 # HashMap
 
 * How it works/stores data 
-    * A Hashmap is a data structure that implementates the interface Map of Java. It stores data using the Key and Value relationship, each Key is paired to a unique value. To access both of them you can use the index of the another. 
-You can not have duplicated key in the same hashmap and  it will replace the element of the corresponding key.
+    * A Hashmap is a data structure that implementates the interface Map of Java. It stores data using the Key and Value relationship, each Key is paired to a unique value. To access both of them you can use the index of the another.
+You can not have duplicated key in the same hashmap but dupcated values are allowed.
 * How a client interacts with it (interface)
 * The pros and cons of using the data structure
 * The space and time complexity of its behavior
