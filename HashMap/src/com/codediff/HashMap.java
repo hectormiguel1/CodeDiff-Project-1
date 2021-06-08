@@ -1,10 +1,12 @@
 package com.codediff;
 
 
-public class HashMap<H, V> {
+import java.util.Arrays;
+
+public class HashMap<K, V> {
     public final int INITIAL_SIZE = 10;
     private final int MAX_EXPANSION = 5;
-    private H[] hashes;
+    private K[] keys;
     private V[] values;
     private int filledSlots = 0;
     private int internalSize = INITIAL_SIZE;
@@ -19,28 +21,44 @@ public class HashMap<H, V> {
         initArrays(internalSize);
     }
 
+    public K[] getKeys() {
+        return keys;
+    }
+
+    public V[] getValues() {
+        return values;
+    }
+
+    @Override
+    public String toString() {
+        return "HashMap{" +
+                "keys=" + Arrays.toString(keys) +
+                ", values=" + Arrays.toString(values) +
+                '}';
+    }
+
     private void initArrays(int arraySizes) {
-        hashes = (H[]) new Object[arraySizes];
+        keys = (K[]) new Object[arraySizes];
         values = (V[]) new Object[arraySizes];
     }
 
 
     private void resize() {
-        H[] newHashes = (H[]) new Object[internalSize * 2];
+        K[] newHashes = (K[]) new Object[internalSize * 2];
         V[] newValues = (V[]) new Object[internalSize * 2];
 
-        for (H hash : hashes) {
-            int oldIndex = hashingFunction(hash, hashes.length);
-            int newIndex = hashingFunction(hash, newHashes.length);
+        for (K key : keys) {
+            int oldIndex = hashingFunction(key, keys.length);
+            int newIndex = hashingFunction(key, newHashes.length);
             newValues[newIndex] = values[oldIndex];
         }
-        System.arraycopy(hashes, 0, newHashes, 0, hashes.length);
+        System.arraycopy(keys, 0, newHashes, 0, keys.length);
 
-        hashes = newHashes;
+        keys = newHashes;
         values = newValues;
     }
 
-    private int hashingFunction(H key, int modulo) {
+    private int hashingFunction(K key, int modulo) {
         String keyString = key.toString();
         int total = 0;
         for (Character character : keyString.toCharArray()) {
@@ -49,8 +67,8 @@ public class HashMap<H, V> {
         return total % modulo;
     }
 
-    public V getValue(H hash) {
-        int index = hashingFunction(hash, hashes.length);
+    public V getValue(K hash) {
+        int index = hashingFunction(hash, keys.length);
         return values[index];
     }
 
@@ -58,17 +76,17 @@ public class HashMap<H, V> {
         return values[index];
     }
 
-    private void addHash(H hash) {
+    private void addKey(K hash) {
         int index = 0;
-        while (hashes[index] != null) {
+        while (keys[index] != null) {
             index++;
         }
-        hashes[index] = hash;
+        keys[index] = hash;
     }
 
-    public boolean containsHash(H hash) {
-        for (H loopHashes : hashes) {
-            if (loopHashes == hash) {
+    public boolean containsKey(K hash) {
+        for (K _keys : keys) {
+            if (_keys.equals(hash)) {
                 return true;
             }
         }
@@ -77,26 +95,51 @@ public class HashMap<H, V> {
 
     /***
      *
-     * @param hash
+     * @param key
      * @param value
      * @return
      */
-    public boolean put(H hash, V value) {
-        int index = hashingFunction(hash, internalSize);
+    public boolean put(K key, V value) {
+        int index = hashingFunction(key, internalSize);
         int counter = 0;
-        while (values[index] != null && counter < MAX_EXPANSION) {
+        while (keys[index] != null && counter < MAX_EXPANSION) {
             resize();
-            index = hashingFunction(hash, internalSize);
+            index = hashingFunction(key, internalSize);
             counter++;
         }
         if (values[index] != null) {
             return false;
         } else {
-            values[index] = value;
-            addHash(hash);
+            if(values[index].equals(value)) {
+                addKey(key);
+                filledSlots++;
+            } else {
+                filledSlots++;
+                values[index] = value;
+                addKey(key);
+            }
             return true;
         }
     }
 
+    private void removeKey(K hash) {
+        for (int index = 0; index < keys.length; index++) {
+            if(keys[index].equals(hash)) {
+                keys[index] = null;
+            }
+        }
+    }
+
+    public void remove(K hash) {
+        if(containsKey(hash)) {
+            int index = hashingFunction(hash, internalSize);
+            keys[index] = null;
+            removeKey(hash);
+        }
+    }
+
+    public double getLoad() {
+        return filledSlots / (double)internalSize;
+    }
 
 }
