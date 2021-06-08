@@ -1,18 +1,23 @@
-# Java Data Structure Tutorial Project
+Java Data Structure Tutorial Project
 You will be given a Data Structure to research. You goal is to create a tutorial for that data structure. For a reference, checkout FreeCodeCamp.
 
 Step 1: Research
 Research about your Data Structure. You should know:
 
-How it works/stores data?
-How a client interacts with it (interface)?
-The pros and cons of using the data structure?
-The space and time complexity of its behavior?
+* How it works/stores data
+* How a client interacts with it (interface)
+* The pros and cons of using the data structure
+* The space and time complexity of its behavior
 # HashMap
 
-The Box Data stucture works by holding whatever information you want and allowing you to stick the box in either the attic or basement. A client can use the `pack()` and `unpack()` methods to put data into and remove from the box. They can also use the `store()` and `unstore()` methods to store it in or remove it from they room they are storing it in. The box provides the benefit of combining like items but has the disadvantage of taking up space and increase the risk of forgeting what is in the box. All the actions run in constant time.
+* How it works/stores data 
+    * A Hashmap is a data structure that implementates the interface Map of Java. It stores data using the Key and Value relationship, each Key is paired to a unique value. To access both of them you can use the index of the another. 
+You can not have duplicated key in the same hashmap and  it will replace the element of the corresponding key.
+* How a client interacts with it (interface)
+* The pros and cons of using the data structure
+* The space and time complexity of its behavior
 
-# Tutorial
+**Tutorial**
 Write a turotial that another developer could follow. We recommend the following structure:
 
 Show how to set up the required classes and stub all the method
