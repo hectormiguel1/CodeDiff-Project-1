@@ -16,12 +16,18 @@ You can not have duplicated key in the same hashmap but dupcated values are allo
 * How a client interacts with it (interface)
 * The pros and cons of using the data structure
 
-|        Pro    |      Cons     |
-| ------------- |:-------------:|
-| Hashsmaps allow Key and value combinations to be inserted | right-aligned |aaaaaaaa|
-| HashMap is a non-synchronized data structure.Which means that without proper synchronization, HashMap cannot be shared between many threads. | aaaaaa |
-| HashMaps are fail-fast iterator.  Meaning during iterationit fails as soon as it recognized the collection's structure has changed. | aaaaa |
-| Hashing technology allows for faster access to elements. | aaaaaa |
+|        Pro    |    
+| ------------- |
+| Hashsmaps allow Key and value combinations to be inserted | 
+| HashMap is a non-synchronized data structure. Which means that without proper synchronization, HashMap cannot be shared between many threads. |
+| HashMaps are fail-fast iterator.  Meaning during iteration it fails as soon as it recognized the collection's structure has changed. | 
+| Hashing technology allows for faster access to elements. | 
+
+|        Cons    |    
+| ------------- |
+| When two separate keys give the same hashCode() value, the performance of the hashMap degrades. | 
+| When the original size of HashMap is full, the HashMap require resizing.  The elements from the previous HashMap are transferred to a new bigger HashMap, which takes O(n) time.|
+
    
    * Having to map to different value
   
