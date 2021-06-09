@@ -19,19 +19,19 @@ You can not have duplicated key in the same hashmap but dupcated values are allo
 |        Pro    |    
 | ------------- |
 | Hashsmaps allow Key and value combinations to be inserted | 
-| HashMap is a non-synchronized data structure. Which means that without proper synchronization, HashMap cannot be shared between many threads. |
 | HashMaps are fail-fast iterator.  Meaning during iteration it fails as soon as it recognized the collection's structure has changed. | 
 | Hashing technology allows for faster access to elements. | 
+| HashMap is a non-synchronized data structure. Which means that without proper synchronization, HashMap cannot be shared between many threads. To avoid accidental unsynchronized access to the map: ```Map m = Collections.synchronizedMap(new HashMap(...)); ``` |
 
 |        Cons    |    
 | ------------- |
 | When two separate keys give the same hashCode() value, the performance of the hashMap degrades. | 
 | When the original size of HashMap is full, the HashMap require resizing.  The elements from the previous HashMap are transferred to a new bigger HashMap, which takes O(n) time.|
+| when iterating through a hashmap, you can not ensure ordering |
 
-   
-   * Having to map to different value
   
 * The space and time complexity of its behavior
+   - 
 
 **Tutorial**
 Write a turotial that another developer could follow. We recommend the following structure:
