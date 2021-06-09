@@ -1,16 +1,12 @@
 package com.codediff;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
     private final int INITIAL_SIZE = 16;
     private final int HASHING_PRIME = 61;
     private final double DEFAULT_LOAD_FACTOR = 0.65;
-    @SuppressWarnings("SortedCollectionWithNonComparableKeys")
-    private Set<Key<K>> keys = new TreeSet<>();
+    private final TreeSet<Key<K>> keys = new TreeSet<>();
     private Node<V>[] values;
     private int filledSlots;
     private double loadFactor= DEFAULT_LOAD_FACTOR;
@@ -84,20 +80,69 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
         if(currentLoad >= loadFactor) {
             resize();
         }
-        int mappingIndex= getMapping(new Key<K>(key));
+        Key<K> newKey = new Key<K>(key);
+        int mappingIndex= getMapping(newKey);
         if(values[mappingIndex] == null) {
             filledSlots++;
-            addKey(key);
-            values[mappingIndex] = new Node<V>(value);
+            addKey(newKey);
+            Node<V> newNode = new Node<V>(value);
+            newNode.setKey(newKey);
+            values[mappingIndex] = newNode;
         } else {
             filledSlots++;
-            addKey(key);
-            insertNode(value, mappingIndex);
+            addKey(newKey);
+            insertNode(value, mappingIndex, newKey);
         }
     }
 
-    private void insertNode(V value, int index) {
+    private void removeNode(Key<K> key) {
+        if (values[key.getMappingIndex()].getKey().equals(key) && values[key.getMappingIndex()].getNextValue() == null) {
+            values[key.getMappingIndex()] = null;
+        } else {
+            Node<V> prevNode = null;
+            Node<V> currentNode = values[key.getMappingIndex()];
+            Node<V> nextNode = currentNode.getNextValue();
+            int removedItems = 0;
+            while (removedItems != key.getNumItemsMapped() && currentNode != null) {
+                boolean foundInCurrentNode = currentNode.getKey().equals(key);
+                if (foundInCurrentNode && prevNode == null) {
+                    values[key.getMappingIndex()] = nextNode;
+                    removedItems++;
+                    filledSlots--;
+                } else if (foundInCurrentNode) {
+                    prevNode.setNextValue(nextNode);
+                    removedItems++;
+                    filledSlots--;
+                } else {
+                    prevNode = currentNode;
+
+                }
+                currentNode = nextNode;
+                if (currentNode != null) {
+                    nextNode = currentNode.getNextValue();
+                }
+
+
+            }
+
+        }
+
+    }
+
+    public void remove(K key) {
+        AtomicReference<Key<K>> keyToRemove = new AtomicReference<>(new Key<K>(key));
+        keys.forEach(element -> {
+            if(element.getKey().equals(key)) {
+                removeNode(element);
+                keyToRemove.set(element);
+            }
+        });
+        keys.remove(keyToRemove.get());
+    }
+
+    private void insertNode(V value, int index, Key<K> key) {
         Node<V> newNode = new Node<V>(value);
+        newNode.setKey(key);
         Node<V> currentNode = values[index];
         Node<V> nextNode = currentNode.getNextValue();
         while(nextNode != null) {
@@ -107,11 +152,20 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
         currentNode.setNextValue(newNode);
     }
 
-    private void addKey(K key) {
-        Key<K> newKey = new Key<K>(key);
-        int mappingIndex = getMapping(newKey);
-        newKey.setMappingIndex(mappingIndex);
-        keys.add(newKey);
+    private void addKey(Key<K> key) {
+        int mappingIndex = getMapping(key);
+        key.setMappingIndex(mappingIndex);
+        key.incrementItemsMapped();
+        if (keys.contains(key)) {
+            keys.forEach(element -> {
+                if (element.equals(key)) {
+                    element.incrementItemsMapped();
+                    ;
+                }
+            });
+        } else {
+            keys.add(key);
+        }
     }
 
     public ArrayList<V> getValues(K key) {
@@ -128,6 +182,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
                 nextNode = currentNode.getNextValue();
             }
             returnValues.add(currentNode.getValue());
+            return returnValues;
         }
         return new ArrayList<>();
     }
@@ -208,104 +263,5 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
     }
 }
 
-class Key<K> implements Comparable<Key<K>>{
-    K key;
-    int mappingIndex;
 
-    Key(K key) {
-        this.key = key;
-    }
 
-    @Override
-    public int hashCode() {
-        char[] characters = key.toString().toCharArray();
-        int total = 0;
-        //Add up ascii character values;
-        for (char character : characters) {
-            total += character;
-        }
-
-        return total;
-    }
-
-    public void setMappingIndex(int mappingIndex) {
-        this.mappingIndex = mappingIndex;
-    }
-
-    public int getMappingIndex() {
-        return mappingIndex;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Key<?> key1 = (Key<?>) o;
-
-        if (mappingIndex != key1.mappingIndex) return false;
-        if(this.hashCode() != key1.hashCode()) return false;
-        return this.hashCode() == o.hashCode();
-    }
-
-    public K getKey() {
-        return key;
-    }
-
-    @Override
-    public int compareTo(@NotNull Key<K> otherKey) {
-        return this.hashCode() - otherKey.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "\nKey{" +
-                "key=" + key +
-                ", mappingIndex=" + mappingIndex +
-                "}";
-    }
-}
-
-class Node<V> {
-    V value;
-    Node<V> nextValue;
-
-    Node(V value) {
-        this.value = value;
-    }
-
-    public V getValue() {
-        return this.value;
-    }
-
-    public void setNextValue(Node<V> nextValue) {
-        this.nextValue = nextValue;
-    }
-
-    public Node<V> getNextValue() {
-        return this.nextValue;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Node<?> node = (Node<?>) o;
-
-        return value.equals(node.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return value.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return "Node{" +
-                "value=" + value +
-                ", nextValue=" + nextValue +
-                "}\n";
-    }
-}
