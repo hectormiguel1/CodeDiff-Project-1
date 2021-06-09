@@ -42,10 +42,10 @@ public class Node<V> {
 
     @Override
     public String toString() {
-        return "Node{" +
+        return "\nNode{" +
                 "value=" + value +
-                ", nextValue=" + nextValue +
-                "}\n";
+                ",nextValue=" + nextValue +
+                "}";
     }
 
     public <K extends Comparable<K>> void setKey(Key<K> key) {

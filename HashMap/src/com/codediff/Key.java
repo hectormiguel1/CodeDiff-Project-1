@@ -65,6 +65,7 @@ public class Key<K> implements Comparable<Key<K>>{
         return "\nKey{" +
                 "key=" + key +
                 ", mappingIndex=" + mappingIndex +
+                ", numberOfItemMapped=" + numItemsMapped +
                 "}";
     }
 

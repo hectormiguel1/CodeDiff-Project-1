@@ -51,11 +51,11 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
 
     private int getMapping(Key<K> key) {
         //Does Modulo with Values Length
-        return (key.hashCode() % (values.length % HASHING_PRIME));
+        return (key.hashCode() % (values.length ));
     }
 
     private int getNewMapping(Key<K> key, int newSize) {
-        return (key.hashCode() % (newSize % HASHING_PRIME));
+        return (key.hashCode() % (newSize));
     }
 
     public ArrayList<V> getValues() {
@@ -259,6 +259,8 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
                 ",\nValues=" + Arrays.toString(values) +
                 ",\nFilledSlots=" + filledSlots +
                 ",\nLoadFactor=" + loadFactor +
+                ",\nCurrentLoad=" + (filledSlots/(double) values.length) +
+                ",\nSize=" + values.length +
                 '}';
     }
 }
