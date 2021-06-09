@@ -30,8 +30,8 @@ You can not have duplicated key in the same hashmap but dupcated values are allo
 | when iterating through a hashmap, you can not ensure ordering |
 
   
-* The space and time complexity of its behavior
-   - 
+   * The space and time complexity of its behavior
+   
 
 **Tutorial**
 Write a turotial that another developer could follow. We recommend the following structure:
