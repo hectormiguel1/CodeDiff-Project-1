@@ -31,11 +31,11 @@ You can not have duplicated key in the same hashmap but dupcated values are allo
     - The get/put/containsKey() operations are O(1) in average case and attein O(n) in the worst cases.
    
 
-##Setting Up the Classes
+## Setting Up the Classes
 
 Below You'll find the skeletons of the classes you'll need for this tutorial
 
-###HashMap Class
+### HashMap Class
 ```java 
 public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
 
@@ -95,7 +95,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
 }
 ```
 
-###Key Class
+### Key Class
 ```java
 public class Key<K> implements Comparable<Key<K>>{
     
@@ -130,7 +130,7 @@ public class Key<K> implements Comparable<Key<K>>{
 }
 ```
 
-###Node Class
+### Node Class
 ```java
 public class Node<V> {
     
@@ -161,7 +161,7 @@ public class Node<V> {
 }
 ```
 
-##Method Implementations
+## Method Implementations
 
 One method at a time, provide a decription and implement.
 ```java
@@ -173,7 +173,7 @@ public void pack(T t){
 }
 ```
 
-##Demonstration
+## Demonstration
 Demonstrate the usage of the Data Structure with a few examples
 
 ```java
