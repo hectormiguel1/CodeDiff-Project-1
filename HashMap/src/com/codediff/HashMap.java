@@ -4,7 +4,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
     private final int INITIAL_SIZE = 16;
-    private final int HASHING_PRIME = 61;
     private final double DEFAULT_LOAD_FACTOR = 0.65;
     private final TreeSet<Key<K>> keys = new TreeSet<>();
     private Node<V>[] values;
@@ -32,13 +31,26 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
     }
 
     private void resize() {
-        Node<V>[] newValues = (Node<V>[]) new Node<?>[values.length * 2];
-        for (var key : getKeys()) {
-            int oldMapping = key.getMappingIndex();
-            int newIndex = getNewMapping(key, newValues.length);
-            newValues[newIndex] = values[oldMapping];
+        Node<V>[] oldArr = Arrays.copyOf(values,values.length);
+        values = (Node<V>[]) new Node<?>[values.length * 2];
+        keys.clear();
+        filledSlots = 0;
+        for (Node<V> value : oldArr) {
+            if(value != null) {
+           Node<V> currentNode = value;
+           Node<V> nextNode = value.getNextValue();
+           while(nextNode != null) {
+               assert currentNode != null;
+               put((K) currentNode.getKeyObject().getKey(), currentNode.getValue());
+               currentNode = currentNode.getNextValue();
+               if(currentNode != null) {
+                   nextNode = currentNode.getNextValue();
+               }
+           }
+           put((K)currentNode.getKeyObject().getKey(), currentNode.getValue());
+            }
         }
-        values = newValues;
+
     }
 
     public ArrayList<Key<K>> getKeys() {
@@ -82,6 +94,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
         }
         Key<K> newKey = new Key<K>(key);
         int mappingIndex= getMapping(newKey);
+        newKey.setMappingIndex(mappingIndex);
         if(values[mappingIndex] == null) {
             filledSlots++;
             addKey(newKey);
@@ -96,7 +109,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
     }
 
     private void removeNode(Key<K> key) {
-        if (values[key.getMappingIndex()].getKey().equals(key) && values[key.getMappingIndex()].getNextValue() == null) {
+        if (values[key.getMappingIndex()].getKeyObject().equals(key) && values[key.getMappingIndex()].getNextValue() == null) {
             values[key.getMappingIndex()] = null;
         } else {
             Node<V> prevNode = null;
@@ -104,7 +117,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
             Node<V> nextNode = currentNode.getNextValue();
             int removedItems = 0;
             while (removedItems != key.getNumItemsMapped() && currentNode != null) {
-                boolean foundInCurrentNode = currentNode.getKey().equals(key);
+                boolean foundInCurrentNode = currentNode.getKeyObject().equals(key);
                 if (foundInCurrentNode && prevNode == null) {
                     values[key.getMappingIndex()] = nextNode;
                     removedItems++;
@@ -115,29 +128,24 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
                     filledSlots--;
                 } else {
                     prevNode = currentNode;
-
                 }
                 currentNode = nextNode;
                 if (currentNode != null) {
                     nextNode = currentNode.getNextValue();
                 }
-
-
             }
-
         }
-
     }
 
     public void remove(K key) {
-        AtomicReference<Key<K>> keyToRemove = new AtomicReference<>(new Key<K>(key));
+        ArrayList<Key<K>> keysToRemove = new ArrayList<>();
         keys.forEach(element -> {
             if(element.getKey().equals(key)) {
                 removeNode(element);
-                keyToRemove.set(element);
+                keysToRemove.add(element);
             }
         });
-        keys.remove(keyToRemove.get());
+        keysToRemove.forEach(keys::remove);
     }
 
     private void insertNode(V value, int index, Key<K> key) {
@@ -153,14 +161,12 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
     }
 
     private void addKey(Key<K> key) {
-        int mappingIndex = getMapping(key);
-        key.setMappingIndex(mappingIndex);
         key.incrementItemsMapped();
         if (keys.contains(key)) {
             keys.forEach(element -> {
                 if (element.equals(key)) {
                     element.incrementItemsMapped();
-                    ;
+
                 }
             });
         } else {
@@ -176,12 +182,17 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
             Node<V> currentNode = values[index];
             Node<V> nextNode = currentNode.getNextValue();
             ArrayList<V> returnValues = new ArrayList<>();
-            while(nextNode != null) {
-                returnValues.add(currentNode.getValue());
+            while(currentNode.getNextValue() != null) {
+                boolean keysEqual = currentNode.getKeyObject().getKey().equals(key);
+                if(keysEqual) {
+                    returnValues.add(currentNode.getValue());
+                }
                 currentNode = nextNode;
                 nextNode = currentNode.getNextValue();
             }
-            returnValues.add(currentNode.getValue());
+            if(currentNode.getKeyObject().getKey().equals(key)) {
+                returnValues.add(currentNode.getValue());
+            }
             return returnValues;
         }
         return new ArrayList<>();
@@ -192,7 +203,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
             if (_value != null) {
                 if (_value.getValue().equals(value)) {
                     return true;
-                } else if (_value.nextValue != null) {
+                } else if (_value.getNextValue() != null) {
                     var currentNode = _value;
                     var nextNode = currentNode.getNextValue();
                     while (nextNode != null) {
@@ -219,7 +230,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
             if (values[index] != null) {
                 if (values[index].getNextValue().getValue().equals(value)) {
                     return index;
-                } else if (values[index].nextValue != null) {
+                } else if (values[index].getNextValue() != null) {
                     Node<V> currentNode = values[index];
                     Node<V> nextNode = currentNode.getNextValue();
                     while (nextNode != null) {

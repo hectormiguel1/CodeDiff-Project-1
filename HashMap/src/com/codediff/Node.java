@@ -1,9 +1,9 @@
 package com.codediff;
 import com.codediff.Key;
 public class Node<V> {
-    V value;
-    Node<V> nextValue;
-    Key key;
+    private V value;
+    private Node<V> nextValue;
+    private Key key;
 
     Node(V value) {
         this.value = value;
@@ -21,7 +21,7 @@ public class Node<V> {
         return this.nextValue;
     }
 
-    public Key getKey() {
+    public Key getKeyObject() {
         return this.key;
     }
 
