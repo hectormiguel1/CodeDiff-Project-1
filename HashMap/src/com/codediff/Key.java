@@ -2,15 +2,13 @@ package com.codediff;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 /***
  * Object will Hold keys in the Hash map as well as other information about the keys, such as the number of items that
  *  key points to and the index where the key maps to.
  * @param <K>: Datatype of the Key object being used.
  */
 public class Key<K> implements Comparable<Key<K>>{
-    private K key;
+    private final K key;
     private int mappingIndex;
     private int numItemsMapped;
 
@@ -18,11 +16,12 @@ public class Key<K> implements Comparable<Key<K>>{
         this.key = key;
     }
 
-    @Override
-    /**
+
+    /***
      * Generates the hashcode for the key.
      * For this example implementation we are keeping it simple and adding up the values of the .toString() characters.
      */
+    @Override
     public int hashCode() {
         char[] characters = key.toString().toCharArray();
         int total = 0;

@@ -1,7 +1,6 @@
 package com.codediff;
 
 
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,6 +8,7 @@ import java.util.stream.IntStream;
 
 public class Test {
     public static void main(String[] args) {
+
         HashMap<String, Integer> testHashMap = new HashMap<>();
         ArrayList<String> generatedKeys = new ArrayList<>();
         ArrayList<Integer> generatedInts = new ArrayList<>();
@@ -19,7 +19,7 @@ public class Test {
             Integer generatedInteger = rng.nextInt();
             generatedInts.add(generatedInteger);
             generatedKeys.add(generatedString);
-            testHashMap.put(generatedString, generatedInteger);
+            testHashMap.insert(generatedString, generatedInteger);
         }
 
         for (int number = 0; number < generatedKeys.size(); number++) {
