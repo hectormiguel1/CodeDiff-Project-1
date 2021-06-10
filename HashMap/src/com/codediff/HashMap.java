@@ -219,7 +219,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
         return false;
     }
 
-      public double getCurrentLoad() {
+    public double getCurrentLoad() {
         return filledSlots / (double)values.length;
     }
 

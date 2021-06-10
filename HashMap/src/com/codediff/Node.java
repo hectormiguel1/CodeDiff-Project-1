@@ -1,5 +1,6 @@
 package com.codediff;
 import com.codediff.Key;
+
 public class Node<V> {
     private V value;
     private Node<V> nextValue;
