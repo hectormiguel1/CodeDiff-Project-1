@@ -2,12 +2,12 @@ Java Data Structure Tutorial Project
 
 # HashMap
 
-**How it works/stores data** 
+* **How it works/stores data** 
     - A Hashmap is a data structure that implementates the interface Map of Java. It stores data using the Key and Value relationship, each Key is paired to a unique value. To access both of them you can use the index of the another.
 You can not have duplicated key in the same hashmap but dupcated values are allowed.
-**How a client interacts with it (interface)**
+* **How a client interacts with it (interface)**
    - To acces an elements from the hashmap the client can use the key to store and retreive a value. They also have the option to get all the keys and all the values in that hashmap.
-**The pros and cons of using the data structure**
+* **The pros and cons of using the data structure**
 
 |        Pro    |    
 | ------------- |
@@ -22,7 +22,7 @@ You can not have duplicated key in the same hashmap but dupcated values are allo
 | When the original size of HashMap is full, the HashMap require resizing.  The elements from the previous HashMap are transferred to a new bigger HashMap, which takes O(n) time.|
 | when iterating through a hashmap, you can not ensure ordering |
 
-**The space and time complexity of its behavior**
+* **The space and time complexity of its behavior**
       - The get/put/containsKey() operations are O(1) in average case and attein O(n) in the worst cases.
    
 
