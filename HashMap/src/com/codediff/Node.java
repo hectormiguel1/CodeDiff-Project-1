@@ -75,7 +75,7 @@ public class Node<V> {
      */
     @Override
     public String toString() {
-        return "\nNode{" +
+        return "\n\t\tNode{" +
                 "value=" + value +
                 ",nextValue=" + nextValue +
                 "}";

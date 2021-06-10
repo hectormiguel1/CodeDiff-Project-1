@@ -73,8 +73,11 @@ public class Key<K> implements Comparable<Key<K>>{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Key<?> key1 = (Key<?>) o;
-        return mappingIndex == key1.mappingIndex && hashCode() == key1.hashCode();
+
+        if (mappingIndex != key1.mappingIndex) return false;
+        return key.equals(key1.key);
     }
 
     /**
@@ -101,7 +104,7 @@ public class Key<K> implements Comparable<Key<K>>{
      */
     @Override
     public String toString() {
-        return "\nKey{" +
+        return "\n\t\tKey{" +
                 "key=" + key +
                 ", mappingIndex=" + mappingIndex +
                 ", numberOfItemMapped=" + numItemsMapped +

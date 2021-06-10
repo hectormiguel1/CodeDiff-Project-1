@@ -283,6 +283,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
     public ArrayList<V> getValues(K key) {
         Key<K> _key = new Key<>(key);
         int index = getMapping(_key);
+        _key.setMappingIndex(index);
         //Check if key is already in the Hash Map, if it does not, we can return an empty list.
         if (!containsKey(key)) {
             return new ArrayList<>();
@@ -294,7 +295,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
             ArrayList<V> returnValues = new ArrayList<>();
             while (currentNode.getNextValue() != null) {
                 //Check if the current Node owner Key equals the Key we are searching for
-                boolean keysEqual = currentNode.getKeyObject().getKey().equals(key);
+                boolean keysEqual = currentNode.getKeyObject().equals(_key);
                 //If owner key is equals to the key we are searching for, add the current nodes value to the return list.
                 if (keysEqual) {
                     returnValues.add(currentNode.getValue());
@@ -304,7 +305,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
                 nextNode = currentNode.getNextValue();
             }
             //If the node is a surface nodes, add it to the return arraylist
-            if (currentNode.getKeyObject().getKey().equals(key)) {
+            if (currentNode.getKeyObject().equals(_key)) {
                 returnValues.add(currentNode.getValue());
             }
             return returnValues;
@@ -394,12 +395,12 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
     @Override
     public String toString() {
         return "HashMap{" +
-                "keys=" + keys +
-                ",\nValues=" + Arrays.toString(values) +
-                ",\nFilledSlots=" + filledSlots +
-                ",\nLoadFactor=" + loadFactor +
-                ",\nCurrentLoad=" + (filledSlots / (double) values.length) +
-                ",\nSize=" + values.length +
+                "\n\tkeys=" + keys +
+                ",\n\tValues=" + Arrays.toString(values) +
+                ",\n\tFilledSlots=" + filledSlots +
+                ",\n\tLoadFactor=" + loadFactor +
+                ",\n\tCurrentLoad=" + (filledSlots / (double) values.length) +
+                ",\n\tSize=" + values.length +
                 '}';
     }
 }
