@@ -219,35 +219,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
         return false;
     }
 
-    /***
-     *
-     * @param value
-     * @return
-     */
-    final int VALUE_NOT_FOUND_SENTINAL = -1;
-    public int getValueIndex(V value) {
-        for (int index = 0; index < values.length; index++) {
-            if (values[index] != null) {
-                if (values[index].getNextValue().getValue().equals(value)) {
-                    return index;
-                } else if (values[index].getNextValue() != null) {
-                    Node<V> currentNode = values[index];
-                    Node<V> nextNode = currentNode.getNextValue();
-                    while (nextNode != null) {
-                        if (currentNode.getValue().equals(value)) {
-                            return index;
-                        } else {
-                            currentNode = nextNode;
-                            nextNode = currentNode;
-                        }
-                    }
-                }
-            }
-        }
-        return VALUE_NOT_FOUND_SENTINAL;
-    }
-
-    public double getCurrentLoad() {
+      public double getCurrentLoad() {
         return filledSlots / (double)values.length;
     }
 

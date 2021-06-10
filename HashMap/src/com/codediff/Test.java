@@ -32,7 +32,6 @@ public class Test {
         testHashMap.remove(generatedKeys.get(randInt));
         System.out.println("Keys: " + testHashMap.getKeys());
         System.out.println("Values: " + testHashMap.getValues());
-
     }
 
     public static String genRngString() {
