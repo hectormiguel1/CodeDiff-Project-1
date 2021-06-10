@@ -28,7 +28,7 @@ You can not have duplicated key in the same hashmap but dupcated values are allo
 
 * **The space and time complexity of its behavior**
 
-      - The get/put/containsKey() operations are O(1) in average case and attein O(n) in the worst cases.
+    - The get/put/containsKey() operations are O(1) in average case and attein O(n) in the worst cases.
    
 
 **Tutorial**
