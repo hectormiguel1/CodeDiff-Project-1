@@ -1,7 +1,9 @@
 package com.codediff;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
-public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
+public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implements Map<K,V>{
     private final int INITIAL_SIZE = 16;
     private final double DEFAULT_LOAD_FACTOR = 0.65;
     private final TreeSet<Key<K>> keys = new TreeSet<>();
@@ -35,6 +37,17 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
         values = (Node<V>[]) new Node<?>[initSize];
     }
 
+
+    @Override
+    public int size() {
+        return filledSlots;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return filledSlots > 0;
+    }
+
     /***
      * Function is un charge of resizing the internal array which hold the values linkedLists.
      * We do this by coping our current values into an old array, then resize the new array to be twice the size
@@ -61,7 +74,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
                     //ReVerify that the currentNode is not null
                     assert currentNode != null;
                     //Insert the current node we are working with.
-                    insert((K) currentNode.getKeyObject().getKey(), currentNode.getValue());
+                    put((K) currentNode.getKeyObject().getKey(), currentNode.getValue());
                     //Updates currentNode and NextNode to move to next nested Node.
                     currentNode = currentNode.getNextValue();
                     if (currentNode != null) {
@@ -69,7 +82,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
                     }
                 }
                 //Insert the surface node.
-                insert((K) currentNode.getKeyObject().getKey(), currentNode.getValue());
+                put((K) currentNode.getKeyObject().getKey(), currentNode.getValue());
             }
         }
 
@@ -80,8 +93,11 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
      *
      * @return: ArrayList containing Keys.
      */
-    public ArrayList<Key<K>> getKeys() {
-        return new ArrayList<>(keys);
+    @Override
+    public Set<K> keySet() {
+        TreeSet<K> returnKeys = new TreeSet<>();
+        keys.forEach(key -> returnKeys.add(key.getKey()));
+        return returnKeys;
     }
 
     /**
@@ -90,7 +106,8 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
      * @param key: Key to test for.
      * @return True if key is present, false otherwise.
      */
-    public boolean containsKey(K key) {
+    @Override
+    public boolean containsKey(Object key) {
         return keys.contains(new Key<>(key));
     }
 
@@ -111,7 +128,8 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
      *
      * @return: ArrayList of Values.
      */
-    public ArrayList<V> getValues() {
+    @Override
+    public ArrayList<V> values() {
         ArrayList<V> returnValues = new ArrayList<>();
         for (Node<V> val : values) {
             Node<V> currentNode = val;
@@ -128,13 +146,26 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
         return returnValues;
     }
 
+    @NotNull
+    @Override
+    public Set<Entry<K, V>> entrySet() {
+       TreeSet<Entry<K,V>> entries = new TreeSet<>();
+
+       keys.forEach((key) -> {
+           V keyFirstValue = get(key);
+           entries.add(new AbstractMap.SimpleEntry<K,V>(key.getKey(), keyFirstValue));
+       });
+
+       return entries;
+    }
+
     /**
      * Function used to add keys and values to the hash map.
      *
      * @param key:   key the value belongs to.
      * @param value: value to be inserted.
      */
-    public void insert(K key, V value) {
+    public V put(K key, V value) {
         //Check the current load of the the map
         double currentLoad = filledSlots / (double) values.length;
         //If the load is too big, resize the structure to avoid collisions.
@@ -160,6 +191,8 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
         filledSlots++;
         //add the new key to the key set.
         addKey(newKey);
+
+        return value;
     }
 
     /**
@@ -213,11 +246,13 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
 
     /***
      * Function used to remove the key from the Hash Map, this will also remove all the Values associated with that key.
-     * @param key: Key to remove from Hash Map.
+     * @param key : Key to remove from Hash Map.
+     * @return: the first value attacked to the key. All items are removed though.
      */
-    public void remove(K key) {
+    public V remove(Object key) {
         //Hold on to the key we need to remove, Using arraylist to get around local variables and lambda expression limitations
         ArrayList<Key<K>> keysToRemove = new ArrayList<>();
+        V returnValue = get(key);
         //Iterate over each key in the set
         keys.forEach(element -> {
             //if the keys are equal, remove the nodes attached to it, add the key to the list of keys to remove.
@@ -228,6 +263,18 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
         });
         //Remove all the keys added to keys to remove list.
         keysToRemove.forEach(keys::remove);
+        return returnValue;
+    }
+
+    @Override
+    public void putAll(@NotNull Map<? extends K, ? extends V> m) {
+        m.forEach(this::put);
+    }
+
+    @Override
+    public void clear() {
+        keys.clear();
+        values = (Node<V>[]) new Object[INITIAL_SIZE];
     }
 
     /***
@@ -280,7 +327,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
      * @param key: Key of values.
      * @return: ArrayList of values which belong to that key. Returns empty array if key not found.
      */
-    public ArrayList<V> getValues(K key) {
+    public ArrayList<V> values(K key) {
         Key<K> _key = new Key<>(key);
         int index = getMapping(_key);
         _key.setMappingIndex(index);
@@ -317,8 +364,9 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
      * @param key: Key owner of the value
      * @return: Value type first value found for the Key, returns empty array if not found.
      */
-    public V getFirstValue(K key) {
-        return new LinkedList<>(getValues(key)).getFirst();
+    @Override
+    public V get(Object key) {
+        return new LinkedList<>(values((K) key)).getFirst();
     }
 
     /***
@@ -326,7 +374,8 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
      * @param value: value to check for.
      * @return: true if the value was found, false otherwise.
      */
-    public boolean containsValue(V value) {
+    @Override
+    public boolean containsValue(Object value) {
         //Iterate over the values.
         for (var _value : values) {
             if (_value != null) {

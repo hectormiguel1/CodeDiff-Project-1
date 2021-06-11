@@ -19,21 +19,23 @@ public class Test {
             Integer generatedInteger = rng.nextInt();
             generatedInts.add(generatedInteger);
             generatedKeys.add(generatedString);
-            testHashMap.insert(generatedString, generatedInteger);
+            testHashMap.put(generatedString, generatedInteger);
         }
 
         for (int number = 0; number < generatedKeys.size(); number++) {
-            System.out.printf("For Key \"%s\" expected value: %d, got: " + testHashMap.getValues(generatedKeys.get(number)) + "\n", generatedKeys.get(number), generatedInts.get(number));
+            System.out.printf("For Key \"%s\" expected value: %d, got: " + testHashMap.values(generatedKeys.get(number)) + "\n", generatedKeys.get(number), generatedInts.get(number));
         }
-        System.out.println("Keys: " + testHashMap.getKeys());
-        System.out.println("Values: " + testHashMap.getValues());
+        System.out.println("Keys: " + testHashMap.keySet());
+        System.out.println("Values: " + testHashMap.values());
         var randInt = rng.nextInt(generatedKeys.size());
         System.out.printf("Removing Key: \"%s\"\n", generatedKeys.get(randInt));
         testHashMap.remove(generatedKeys.get(randInt));
-        System.out.println("Keys: " + testHashMap.getKeys());
-        System.out.println("Values: " + testHashMap.getValues());
+        System.out.println("Keys: " + testHashMap.keySet());
+        System.out.println("Values: " + testHashMap.values());
 
         System.out.println(testHashMap);
+
+        java.util.HashMap<String, Integer> trest;
     }
 
     public static String genRngString() {
