@@ -2,8 +2,8 @@ Java Data Structure Tutorial Project
 
 # HashMap
 
-* **How it works/stores data** 
-
+* **How it works/stores data**
+**  (Only real programmers can read image)
 <img src="https://github.com/hectormiguel1/CodeDiff-Project-1/raw/main/graphics/hashmap.png"></img>
 - A Hashmap is a data structure that implementates the interface Map of Java. It stores data using the Key and Value relationship. You can not have duplicated key in the same hashmap but dupcated values are allowed. Keys are stored in a set and the values are store in a chain of nodes. You can acces the values using the keys. 
 
