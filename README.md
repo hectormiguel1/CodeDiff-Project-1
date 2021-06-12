@@ -1,17 +1,20 @@
-Java Data Structure Tutorial Project
+# Java Data Structure Tutorial Project
 
-# HashMap
+## HashMap
 
-* **How it works/stores data**
-**  (Only real programmers can read image)
+### How it works/stores data
+
+*(Only real programmers can read image)*
+
 <img src="https://github.com/hectormiguel1/CodeDiff-Project-1/raw/main/graphics/hashmap.png"></img>
-- A Hashmap is a data structure that implementates the interface Map of Java. It stores data using the Key and Value relationship. You can not have duplicated key in the same hashmap but dupcated values are allowed. Keys are stored in a set and the values are store in a chain of nodes. You can acces the values using the keys. 
 
-* **How a client interacts with it (interface)**
+A Hashmap is a data structure that implementates the interface Map of Java. It stores data using the Key and Value relationship. You can not have duplicated key in the same hashmap but dupcated values are allowed. Keys are stored in a set and the values are store in a chain of nodes. You can acces the values using the keys. 
 
-   - To acces an elements from the hashmap the client can use the key to store and retreive a values. They also have the option to get all the keys and all the values in that hashmap.
+### How a client interacts with it (interface)
+
+To acces an elements from the hashmap the client can use the key to store and retreive a values. They also have the option to get all the keys and all the values in that hashmap.
    
-* **The pros and cons of using the data structure**
+### The pros and cons of using the data structure
 
 |        Pro    |    
 | ------------- |
@@ -26,162 +29,94 @@ Java Data Structure Tutorial Project
 | When the original size of HashMap is full, the HashMap require resizing.  The elements from the previous HashMap are transferred to a new bigger HashMap, which takes O(n) time.|
 | when iterating through a hashmap, you can not ensure ordering |
 
-* **The space and time complexity of its behavior**
+### The space and time complexity of its behavior
 
-    - The get/put/containsKey() operations are O(1) in average case and attein O(n) in the worst cases.
-   
+The get/put/containsKey() operations are O(1) in average case and attein O(n) in the worst cases.
+
+---
 
 ## Setting Up the Classes
-
 Below You'll find the skeletons of the classes you'll need for this tutorial
 
 ### Key Class
+The First Class you'll have to set up is the Key class. This class, true to its name, will serve as the key in our key - value pair.
+It is a wrapper class allowing users to choose the type of object they want as keys while allowing us to track specific pieces of data related to it.
+ 
 ```java
 import org.jetbrains.annotations.NotNull;
 
-/***
- * Object will Hold keys in the Hash map as well as other information about the keys, such as the number of items that
- *  key points to and the index where the key maps to.
- * @param <K>: Datatype of the Key object being used.
- */
-public class Key<K> implements Comparable<Key<K>>{
-  private final K key;
-  private int mappingIndex;
-  private int numItemsMapped;
-
-  Key(K key) {}
-
-
-  /***
-   * Generates the hashcode for the key.
-   * For this example implementation we are keeping it simple and adding up the values of the .toString() characters.
-   */
-  @Override
-  public int hashCode() {}
-
-  /**
-   * Setter for the mappingIndex
-   * @param mappingIndex: new mapping index.
-   */
-  public void setMappingIndex(int mappingIndex) {}
-
-  /***
-   * Getter for the currentMapping index.
-   * @return: Integer, the current location the key points to.
-   */
-  public int getMappingIndex() {}
-
-  /**
-   * Getter for the number of items the key points to.
-   * @return: Integer number of items the key points to.
-   */
-  public int getNumItemsMapped() {}
-
-  /**
-   * Increments the number of items the key points to.
-   */
-  public void incrementItemsMapped() {}
-
-  /***
-   * Compares the current instance of Key to another Object.
-   * @param o: Other Object.
-   * @return: True if objects are equal, false otherwise.
-   */
-  @Override
-  public boolean equals(Object o) {}
-
-  /**
-   * Getter for the Key Object
-   * @return: returns the Internal Key object.
-   */
-  public K getKey() {}
-
-  /**
-   * Used to compare one Key to another Key
-   * @param otherKey: Key to compare against.
-   * @return Integer  < 0 if other key has higher hashCode, 0 if same, > 0 if lower than.
-   */
-  @Override
-  public int compareTo(@NotNull Key<K> otherKey) {}
-
-  /**
-   * String representation of the Key
-   * @return Stringified version of the object.
-   */
-  @Override
-  public String toString() {}
+public class Key<K> implements Comparable<Key<K>>{ 
+    
+    private final K key;
+    private int mappingIndex;
+    private int numItemsMapped;
+    
+    Key(K key) {}
+    
+    @Override 
+    public int hashCode() {}
+    
+    public void setMappingIndex(int mappingIndex) {}
+        
+    public int getMappingIndex() {}
+        
+    public int getNumItemsMapped() {}
+        
+    public void incrementItemsMapped() {}
+        
+    @Override
+    public boolean equals(Object o) {}
+        
+    public K getKey() {}
+        
+    @Override
+    public int compareTo(@NotNull Key<K> otherKey) {}
+        
+    @Override
+    public String toString() {}
 
 }
 ```
 
 ### Node Class
+The next class on our list is the Node Class. This class serves as containers for our key - value pairs. They will be used
+in our hash map as chains linking key - values pairs to specific indexes while allowing for collision. 
 ```java
-/***
- * Class will contain the Values used in the hashmap
- * @param <V>: Datatype of Values
- */
-public class Node<V> {
-  private final V value;
-  private Node<V> nextValue;
-  private Key<?> key;
+public class Node<V> { 
+    private final V value;
+    private Node<V> nextValue;
+    private Key<?> key;
+    
+    Node(V value) {}
+    
+    public V getValue() {}
+    
+    public void setNextValue(Node<V> nextValue) {}
 
-  Node(V value) {}
-
-  /***
-   * Getter for Values
-   * @return: Returns the value currently stored in the Node.
-   */
-  public V getValue() {}
-
-  /**
-   * Sets the next Node in the Link
-   * @param nextValue: the next Node in the Link.
-   */
-  public void setNextValue(Node<V> nextValue) {}
-
-  /***
-   * Returns the value which fallows this one, when they are mapped to the same location.
-   * @return: Returns the next that was mapped to this same index.
-   */
   public Node<V> getNextValue() {}
 
-  /**
-   * Getter for the Node Key Object.
-   * @return: Returns the Key to which this value belongs to.
-   */
   public Key<?> getKeyObject() {}
 
-  /**
-   * Compare this object to another object.
-   * @param o : Object to compare against.
-   * @return: true of objects are equals, false otherwise.
-   */
   @Override
   public boolean equals(Object o) {}
 
-  /***
-   * Used to overwrite the Object hashCode()
-   * @return: Hashcode for our value.
-   */
   @Override
   public int hashCode() {}
 
-  /**
-   * Used to convert Object to string format.
-   * @return: String version of the object.
-   */
   @Override
   public String toString() {}
 
-  /**
-   * Used to set the key this object belongs to.
-   * @param key: parent Key.
-   */
   public void setKey(Key<?> key) {}
 }
 ```
 
 ### HashMap Class
+The final class that we'll have to set up is the HashMap Class. Through Composition this class contains a reference to a 
+set of Keys and an array of Nodes. We've already explained how a HashMap generally works but to save you some scroll time
+we'll briefly describe it again. Our HashMap accepts objects as either a Keys or Values the type of which is decided 
+through the use of Type parameters at instantiation. The Key that the user inputs is then hashed to find an index to store
+the pair in. If two Keys end up refering to the same index then the newest pair is "Linked" to the back of the whatever 
+was their before it.  
 ```java 
 import org.jetbrains.annotations.NotNull;
 import java.util.*;
