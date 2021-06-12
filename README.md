@@ -35,137 +35,555 @@ Java Data Structure Tutorial Project
 
 Below You'll find the skeletons of the classes you'll need for this tutorial
 
-### HashMap Class
-```java 
-public class HashMap <K extends Comparable<K>,V extends Comparable<V>> {
-
-    private final int INITIAL_SIZE = 16;
-    private final double DEFAULT_LOAD_FACTOR = 0.65;
-    private final TreeSet<Key<K>> keys = new TreeSet<>();
-    private Node<V>[] values;
-    private int filledSlots;
-    private double loadFactor= DEFAULT_LOAD_FACTOR;
-
-    HashMap() {}
-
-    HashMap(int initialSize) {}
-    
-    HashMap(int initialSize, double loadFactor) {}
-    
-    HashMap(double loadFactor) {}
-
-    private void initArray(int initSize) {}
-
-    private void resize() {}
-
-    public ArrayList<Key<K>> getKeys() {}
-
-    public boolean containsKey(K key) {}
-
-    private int getMapping(Key<K> key) {}
-
-    private int getNewMapping(Key<K> key, int newSize) {}
-
-    public ArrayList<V> getValues() {}
-
-    public void put(K key, V value) {}
-
-    private void removeNode(Key<K> key) {}
-
-    public void remove(K key) {}
-
-    private void insertNode(V value, int index, Key<K> key) {}
-
-    private void addKey(Key<K> key) {}
-
-    public ArrayList<V> getValues(K key) {}
-
-    public boolean containsValue(V value) {}
-
-    public double getCurrentLoad() {}
-
-    public int getFilledSlots() {}
-
-    public double getLoadFactor() {}
-
-    public void setLoadFactor(double loadFactor) {}
-
-    @Override
-    public String toString() {}
-    
-}
-```
-
 ### Key Class
 ```java
+import org.jetbrains.annotations.NotNull;
+
+/***
+ * Object will Hold keys in the Hash map as well as other information about the keys, such as the number of items that
+ *  key points to and the index where the key maps to.
+ * @param <K>: Datatype of the Key object being used.
+ */
 public class Key<K> implements Comparable<Key<K>>{
-    
-    private K key;
-    private int mappingIndex;
-    private int numItemsMapped;
+  private final K key;
+  private int mappingIndex;
+  private int numItemsMapped;
 
-    Key(K key) {}
+  Key(K key) {}
 
-    @Override
-    public int hashCode() {}
-  
-    public void setMappingIndex(int mappingIndex) {}
 
-    public int getMappingIndex() {}
+  /***
+   * Generates the hashcode for the key.
+   * For this example implementation we are keeping it simple and adding up the values of the .toString() characters.
+   */
+  @Override
+  public int hashCode() {}
 
-    public int getNumItemsMapped() {}
+  /**
+   * Setter for the mappingIndex
+   * @param mappingIndex: new mapping index.
+   */
+  public void setMappingIndex(int mappingIndex) {}
 
-    public void incrementItemsMapped() {}
+  /***
+   * Getter for the currentMapping index.
+   * @return: Integer, the current location the key points to.
+   */
+  public int getMappingIndex() {}
 
-    @Override
-    public boolean equals(Object o) {}
+  /**
+   * Getter for the number of items the key points to.
+   * @return: Integer number of items the key points to.
+   */
+  public int getNumItemsMapped() {}
 
-    public K getKey() {}
+  /**
+   * Increments the number of items the key points to.
+   */
+  public void incrementItemsMapped() {}
 
-    @Override
-    public int compareTo(@NotNull Key<K> otherKey) {}
+  /***
+   * Compares the current instance of Key to another Object.
+   * @param o: Other Object.
+   * @return: True if objects are equal, false otherwise.
+   */
+  @Override
+  public boolean equals(Object o) {}
 
-    @Override
-    public String toString() {}
+  /**
+   * Getter for the Key Object
+   * @return: returns the Internal Key object.
+   */
+  public K getKey() {}
+
+  /**
+   * Used to compare one Key to another Key
+   * @param otherKey: Key to compare against.
+   * @return Integer  < 0 if other key has higher hashCode, 0 if same, > 0 if lower than.
+   */
+  @Override
+  public int compareTo(@NotNull Key<K> otherKey) {}
+
+  /**
+   * String representation of the Key
+   * @return Stringified version of the object.
+   */
+  @Override
+  public String toString() {}
 
 }
 ```
 
 ### Node Class
 ```java
+/***
+ * Class will contain the Values used in the hashmap
+ * @param <V>: Datatype of Values
+ */
 public class Node<V> {
-    
-    private V value;
-    private Node<V> nextValue;
-    private Key key;
+  private final V value;
+  private Node<V> nextValue;
+  private Key<?> key;
 
-    Node(V value) {}
+  Node(V value) {}
 
-    public V getValue() {}
+  /***
+   * Getter for Values
+   * @return: Returns the value currently stored in the Node.
+   */
+  public V getValue() {}
 
-    public void setNextValue(Node<V> nextValue) {}
+  /**
+   * Sets the next Node in the Link
+   * @param nextValue: the next Node in the Link.
+   */
+  public void setNextValue(Node<V> nextValue) {}
 
-    public Node<V> getNextValue() {}
+  /***
+   * Returns the value which fallows this one, when they are mapped to the same location.
+   * @return: Returns the next that was mapped to this same index.
+   */
+  public Node<V> getNextValue() {}
 
-    public Key getKeyObject() {}
+  /**
+   * Getter for the Node Key Object.
+   * @return: Returns the Key to which this value belongs to.
+   */
+  public Key<?> getKeyObject() {}
+
+  /**
+   * Compare this object to another object.
+   * @param o : Object to compare against.
+   * @return: true of objects are equals, false otherwise.
+   */
+  @Override
+  public boolean equals(Object o) {}
+
+  /***
+   * Used to overwrite the Object hashCode()
+   * @return: Hashcode for our value.
+   */
+  @Override
+  public int hashCode() {}
+
+  /**
+   * Used to convert Object to string format.
+   * @return: String version of the object.
+   */
+  @Override
+  public String toString() {}
+
+  /**
+   * Used to set the key this object belongs to.
+   * @param key: parent Key.
+   */
+  public void setKey(Key<?> key) {}
+}
+```
+
+### HashMap Class
+```java 
+import org.jetbrains.annotations.NotNull;
+import java.util.*;
+
+public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implements Map<K,V>{
+    private final int INITIAL_SIZE = 16;
+    private final double DEFAULT_LOAD_FACTOR = 0.65;
+    private final TreeSet<Key<K>> keys = new TreeSet<>();
+    private Node<V>[] values;
+    private int filledSlots;
+    private double loadFactor = DEFAULT_LOAD_FACTOR;
+
+    HashMap() {}
+
+    HashMap(int initialSize) {}
+
+    HashMap(int initialSize, double loadFactor) {}
+
+    HashMap(double loadFactor) {}
+
+    /***
+     * Used to initialize the internal array structure which holds the values.
+     * @param initSize: Initial size of the array.
+     */
+    private void initArray(int initSize) {}
+
 
     @Override
-    public boolean equals(Object o) {}
+    public int size() {}
 
     @Override
-    public int hashCode() {}
+    public boolean isEmpty() {}
 
+    /***
+     * Function is un charge of resizing the internal array which hold the values linkedLists.
+     * We do this by coping our current values into an old array, then resize the new array to be twice the size
+     * it currently is, then we iterate through each node in the old values array and reinsert them into the new values
+     * array.
+     */
+    private void resize() {}
+
+    /**
+     * Returns all they keys currently in the hash map
+     *
+     * @return: ArrayList containing Keys.
+     */
+    @Override
+    public Set<K> keySet() {}
+
+    /**
+     * Utility function to check if the current key is already in the hash map.
+     *
+     * @param key: Key to test for.
+     * @return True if key is present, false otherwise.
+     */
+    @Override
+    public boolean containsKey(Object key) {}
+
+    /**
+     * Function maps the hashcode for they key to an index in the values array.
+     *
+     * @param key: Key to get mapping for.
+     * @return: Index the Key maps to.
+     */
+    private int getMapping(Key<K> key) {}
+
+    /**
+     * Function returns all they values currently in the hash Map, these values are return in their order,
+     * IE all nodes in index 0, then all nodes in index 1, .......
+     *
+     * @return: ArrayList of Values.
+     */
+    @Override
+    public ArrayList<V> values() {}
+
+    @NotNull
+    @Override
+    public Set<Entry<K, V>> entrySet() {}
+
+    /**
+     * Function used to add keys and values to the hash map.
+     *
+     * @param key:   key the value belongs to.
+     * @param value: value to be inserted.
+     */
+    public V put(K key, V value) {}
+
+    /**
+     * Utility Function to remove a node from values array.
+     *
+     * @param key: Key owner of the node to remove.
+     */
+    private void removeNode(Key<K> key) {}
+
+    /***
+     * Function used to remove the key from the Hash Map, this will also remove all the Values associated with that key.
+     * @param key : Key to remove from Hash Map.
+     * @return: the first value attacked to the key. All items are removed though.
+     */
+    public V remove(Object key) {}
+
+    @Override
+    public void putAll(@NotNull Map<? extends K, ? extends V> m) {}
+
+    @Override
+    public void clear() {}
+
+    /***
+     * Function used when inserting a node into an already existing Node chain.
+     * @param value: Value to be inserted in the Node Chain
+     * @param index: index the Key owner of value is mapped to.
+     * @param key: key owner of the value.
+     */
+    private void insertNode(V value, int index, Key<K> key) {}
+
+    /**
+     * Function to add the key to the the set, if the key already is in the set, increment the number of values the key points to.
+     *
+     * @param key: Key to be added.
+     */
+    private void addKey(Key<K> key) {}
+
+    /***
+     * Function returns all the values in the values array which are mapped to the passed key.
+     * @param key: Key of values.
+     * @return: ArrayList of values which belong to that key. Returns empty array if key not found.
+     */
+    public ArrayList<V> values(K key) {}
+
+    /***
+     * Utility function to return the first value attached to the key.
+     * @param key: Key owner of the value
+     * @return: Value type first value found for the Key, returns empty array if not found.
+     */
+    @Override
+    public V get(Object key) {}
+
+    /***
+     * Utility Function to check the the passed value is currently in the hash map.
+     * @param value: value to check for.
+     * @return: true if the value was found, false otherwise.
+     */
+    @Override
+    public boolean containsValue(Object value) {}
+
+    /***
+     * Read the current Load on the HashMap.
+     * @return: current load on the hashmap.
+     */
+    public double getCurrentLoad() {}
+
+    /**
+     * Get the current number of slots filled on the map.
+     * @return: filledSlots.
+     */
+    public int getFilledSlots() {}
+
+    /***
+     * Get the current load factor used when deciding when to auto expand the hash map.
+     * @return: current load factor (value between 0 and 1).
+     */
+    public double getLoadFactor() {}
+
+    /***
+     * Update the current load factor..
+     * @param loadFactor: new load factor values, values between (0 and 1) expected.
+     */
+    public void setLoadFactor(double loadFactor) {}
+
+    /***
+     * Creates a string version of the Map.
+     * @return: returns string representation of the map.
+     */
     @Override
     public String toString() {}
-
-    public <K extends Comparable<K>> void setKey(Key<K> key) {}
-  
 }
 ```
 
 ## Method Implementations
 
 One method at a time, provide a decription and implement.
+
+### Key Constructor
+
+```java
+    Key(K key) {
+        this.key = key;
+    }
+```
+
+### Key Methods
+```java
+    /***
+     * Generates the hashcode for the key.
+     * For this example implementation we are keeping it simple and adding up the values of the .toString() characters.
+     */
+    @Override
+    public int hashCode() {
+        char[] characters = key.toString().toCharArray();
+        int total = 0;
+        //Add up ascii character values;
+        for (char character : characters) {
+            total += character;
+        }
+
+        return total;
+    }
+```
+    
+```java
+    /**
+     * Setter for the mappingIndex
+     * @param mappingIndex: new mapping index.
+     */
+    public void setMappingIndex(int mappingIndex) {
+        this.mappingIndex = mappingIndex;
+    }
+```
+
+```java
+    /***
+     * Getter for the currentMapping index.
+     * @return: Integer, the current location the key points to.
+     */
+    public int getMappingIndex() {
+        return mappingIndex;
+    }
+```
+
+```java
+    /**
+     * Getter for the number of items the key points to.
+     * @return: Integer number of items the key points to.
+     */
+    public int getNumItemsMapped() {
+        return numItemsMapped;
+    }
+```
+
+```java
+    /**
+     * Increments the number of items the key points to.
+     */
+    public void incrementItemsMapped() {
+        numItemsMapped++;
+    }
+```
+
+```java
+    /***
+     * Compares the current instance of Key to another Object.
+     * @param o: Other Object.
+     * @return: True if objects are equal, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Key<?> key1 = (Key<?>) o;
+
+        if (mappingIndex != key1.mappingIndex) return false;
+        return key.equals(key1.key);
+    }
+```
+
+```java
+    /**
+     * Getter for the Key Object
+     * @return: returns the Internal Key object.
+     */
+    public K getKey() {
+        return key;
+    }
+```
+
+```java
+    /**
+     * Used to compare one Key to another Key
+     * @param otherKey: Key to compare against.
+     * @return Integer  < 0 if other key has higher hashCode, 0 if same, > 0 if lower than.
+     */
+    @Override
+    public int compareTo(@NotNull Key<K> otherKey) {
+        return this.hashCode() - otherKey.hashCode();
+    }
+```
+
+```java
+    /**
+     * String representation of the Key
+     * @return Stringified version of the object.
+     */
+    @Override
+    public String toString() {
+        return "\n\t\tKey{" +
+                "key=" + key +
+                ", mappingIndex=" + mappingIndex +
+                ", numberOfItemMapped=" + numItemsMapped +
+                "}";
+    }
+```
+    
+### Node Constructor
+```java
+    Node(V value) {
+        this.value = value;
+    }
+```
+
+### Node Methods
+```java
+    /***
+     * Getter for Values
+     * @return: Returns the value currently stored in the Node.
+     */
+    public V getValue() {
+        return this.value;
+    }
+```
+
+```java
+    /**
+     * Sets the next Node in the Link
+     * @param nextValue: the next Node in the Link.
+     */
+    public void setNextValue(Node<V> nextValue) {
+        this.nextValue = nextValue;
+    }
+```
+
+```java
+    /***
+     * Returns the value which fallows this one, when they are mapped to the same location.
+     * @return: Returns the next that was mapped to this same index.
+     */
+    public Node<V> getNextValue() {
+        return this.nextValue;
+    }
+```
+
+```java
+    /**
+     * Getter for the Node Key Object.
+     * @return: Returns the Key to which this value belongs to.
+     */
+    public Key<?> getKeyObject() {
+        return this.key;
+    }
+```    
+
+```java
+    /**
+     * Compare this object to another object.
+     * @param o : Object to compare against.
+     * @return: true of objects are equals, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node<?> node = (Node<?>) o;
+
+        return value.equals(node.value);
+    }
+```    
+
+```java
+    /***
+     * Used to overwrite the Object hashCode()
+     * @return: Hashcode for our value.
+     */
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+```
+
+```java
+    /**
+     * Used to convert Object to string format.
+     * @return: String version of the object.
+     */
+    @Override
+    public String toString() {
+        return "\n\t\tNode{" +
+                "value=" + value +
+                ",nextValue=" + nextValue +
+                "}";
+    }
+```    
+
+```java
+    /**
+     * Used to set the key this object belongs to.
+     * @param key: parent Key.
+     */
+    public void setKey(Key<?> key) {
+        this.key = key;
+    }
+```
 
 ### HashMap Constructors
 ```java
@@ -659,230 +1077,6 @@ One method at a time, provide a decription and implement.
                 '}';
     }
 ```
-
-
-### Key Constructor
-
-```java
-    Key(K key) {
-        this.key = key;
-    }
-```
-
-### Key Methods
-```java
-    /***
-     * Generates the hashcode for the key.
-     * For this example implementation we are keeping it simple and adding up the values of the .toString() characters.
-     */
-    @Override
-    public int hashCode() {
-        char[] characters = key.toString().toCharArray();
-        int total = 0;
-        //Add up ascii character values;
-        for (char character : characters) {
-            total += character;
-        }
-
-        return total;
-    }
-```
-    
-```java
-    /**
-     * Setter for the mappingIndex
-     * @param mappingIndex: new mapping index.
-     */
-    public void setMappingIndex(int mappingIndex) {
-        this.mappingIndex = mappingIndex;
-    }
-```
-
-```java
-    /***
-     * Getter for the currentMapping index.
-     * @return: Integer, the current location the key points to.
-     */
-    public int getMappingIndex() {
-        return mappingIndex;
-    }
-```
-
-```java
-    /**
-     * Getter for the number of items the key points to.
-     * @return: Integer number of items the key points to.
-     */
-    public int getNumItemsMapped() {
-        return numItemsMapped;
-    }
-```
-
-```java
-    /**
-     * Increments the number of items the key points to.
-     */
-    public void incrementItemsMapped() {
-        numItemsMapped++;
-    }
-```
-
-```java
-    /***
-     * Compares the current instance of Key to another Object.
-     * @param o: Other Object.
-     * @return: True if objects are equal, false otherwise.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Key<?> key1 = (Key<?>) o;
-
-        if (mappingIndex != key1.mappingIndex) return false;
-        return key.equals(key1.key);
-    }
-```
-
-```java
-    /**
-     * Getter for the Key Object
-     * @return: returns the Internal Key object.
-     */
-    public K getKey() {
-        return key;
-    }
-```
-
-```java
-    /**
-     * Used to compare one Key to another Key
-     * @param otherKey: Key to compare against.
-     * @return Integer  < 0 if other key has higher hashCode, 0 if same, > 0 if lower than.
-     */
-    @Override
-    public int compareTo(@NotNull Key<K> otherKey) {
-        return this.hashCode() - otherKey.hashCode();
-    }
-```
-
-```java
-    /**
-     * String representation of the Key
-     * @return Stringified version of the object.
-     */
-    @Override
-    public String toString() {
-        return "\n\t\tKey{" +
-                "key=" + key +
-                ", mappingIndex=" + mappingIndex +
-                ", numberOfItemMapped=" + numItemsMapped +
-                "}";
-    }
-```
-    
-### Node Constructor
-```java
-    Node(V value) {
-        this.value = value;
-    }
-```
-
-### Node Methods
-```java
-    /***
-     * Getter for Values
-     * @return: Returns the value currently stored in the Node.
-     */
-    public V getValue() {
-        return this.value;
-    }
-```
-
-```java
-    /**
-     * Sets the next Node in the Link
-     * @param nextValue: the next Node in the Link.
-     */
-    public void setNextValue(Node<V> nextValue) {
-        this.nextValue = nextValue;
-    }
-```
-
-```java
-    /***
-     * Returns the value which fallows this one, when they are mapped to the same location.
-     * @return: Returns the next that was mapped to this same index.
-     */
-    public Node<V> getNextValue() {
-        return this.nextValue;
-    }
-```
-
-```java
-    /**
-     * Getter for the Node Key Object.
-     * @return: Returns the Key to which this value belongs to.
-     */
-    public Key<?> getKeyObject() {
-        return this.key;
-    }
-```    
-
-```java
-    /**
-     * Compare this object to another object.
-     * @param o : Object to compare against.
-     * @return: true of objects are equals, false otherwise.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Node<?> node = (Node<?>) o;
-
-        return value.equals(node.value);
-    }
-```    
-
-```java
-    /***
-     * Used to overwrite the Object hashCode()
-     * @return: Hashcode for our value.
-     */
-    @Override
-    public int hashCode() {
-        return value.hashCode();
-    }
-```
-
-```java
-    /**
-     * Used to convert Object to string format.
-     * @return: String version of the object.
-     */
-    @Override
-    public String toString() {
-        return "\n\t\tNode{" +
-                "value=" + value +
-                ",nextValue=" + nextValue +
-                "}";
-    }
-```    
-
-```java
-    /**
-     * Used to set the key this object belongs to.
-     * @param key: parent Key.
-     */
-    public void setKey(Key<?> key) {
-        this.key = key;
-    }
-```
-
-
 
 ## Demonstration
 Demonstrate the usage of the Data Structure with a few examples
