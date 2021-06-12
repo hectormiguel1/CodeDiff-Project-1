@@ -83,6 +83,7 @@ The next class on our list is the Node Class. This class serves as containers fo
 in our hash map as chains linking key - values pairs to specific indexes while allowing for collision. 
 ```java
 public class Node<V> { 
+    
     private final V value;
     private Node<V> nextValue;
     private Key<?> key;
@@ -92,21 +93,21 @@ public class Node<V> {
     public V getValue() {}
     
     public void setNextValue(Node<V> nextValue) {}
-
-  public Node<V> getNextValue() {}
-
-  public Key<?> getKeyObject() {}
-
-  @Override
-  public boolean equals(Object o) {}
-
-  @Override
-  public int hashCode() {}
-
-  @Override
-  public String toString() {}
-
-  public void setKey(Key<?> key) {}
+    
+    public Node<V> getNextValue() {}
+    
+    public Key<?> getKeyObject() {}
+    
+    @Override 
+    public boolean equals(Object o) {}
+    
+    @Override 
+    public int hashCode() {}
+    
+    @Override 
+    public String toString() {}
+    
+    public void setKey(Key<?> key) {}
 }
 ```
 
@@ -117,18 +118,19 @@ we'll briefly describe it again. Our HashMap accepts objects as either a Keys or
 through the use of Type parameters at instantiation. The Key that the user inputs is then hashed to find an index to store
 the pair in. If two Keys end up refering to the same index then the newest pair is "Linked" to the back of the whatever 
 was their before it.  
-```java 
+```java
 import org.jetbrains.annotations.NotNull;
 import java.util.*;
 
-public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implements Map<K,V>{
+public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implements Map<K,V>{ 
+    
     private final int INITIAL_SIZE = 16;
     private final double DEFAULT_LOAD_FACTOR = 0.65;
     private final TreeSet<Key<K>> keys = new TreeSet<>();
     private Node<V>[] values;
     private int filledSlots;
     private double loadFactor = DEFAULT_LOAD_FACTOR;
-
+    
     HashMap() {}
 
     HashMap(int initialSize) {}
@@ -137,58 +139,24 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
 
     HashMap(double loadFactor) {}
 
-    /***
-     * Used to initialize the internal array structure which holds the values.
-     * @param initSize: Initial size of the array.
-     */
     private void initArray(int initSize) {}
-
-
+    
     @Override
     public int size() {}
 
     @Override
     public boolean isEmpty() {}
 
-    /***
-     * Function is un charge of resizing the internal array which hold the values linkedLists.
-     * We do this by coping our current values into an old array, then resize the new array to be twice the size
-     * it currently is, then we iterate through each node in the old values array and reinsert them into the new values
-     * array.
-     */
     private void resize() {}
 
-    /**
-     * Returns all they keys currently in the hash map
-     *
-     * @return: ArrayList containing Keys.
-     */
     @Override
     public Set<K> keySet() {}
 
-    /**
-     * Utility function to check if the current key is already in the hash map.
-     *
-     * @param key: Key to test for.
-     * @return True if key is present, false otherwise.
-     */
     @Override
     public boolean containsKey(Object key) {}
 
-    /**
-     * Function maps the hashcode for they key to an index in the values array.
-     *
-     * @param key: Key to get mapping for.
-     * @return: Index the Key maps to.
-     */
     private int getMapping(Key<K> key) {}
 
-    /**
-     * Function returns all they values currently in the hash Map, these values are return in their order,
-     * IE all nodes in index 0, then all nodes in index 1, .......
-     *
-     * @return: ArrayList of Values.
-     */
     @Override
     public ArrayList<V> values() {}
 
@@ -196,26 +164,10 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
     @Override
     public Set<Entry<K, V>> entrySet() {}
 
-    /**
-     * Function used to add keys and values to the hash map.
-     *
-     * @param key:   key the value belongs to.
-     * @param value: value to be inserted.
-     */
     public V put(K key, V value) {}
 
-    /**
-     * Utility Function to remove a node from values array.
-     *
-     * @param key: Key owner of the node to remove.
-     */
     private void removeNode(Key<K> key) {}
 
-    /***
-     * Function used to remove the key from the Hash Map, this will also remove all the Values associated with that key.
-     * @param key : Key to remove from Hash Map.
-     * @return: the first value attacked to the key. All items are removed though.
-     */
     public V remove(Object key) {}
 
     @Override
@@ -224,72 +176,26 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
     @Override
     public void clear() {}
 
-    /***
-     * Function used when inserting a node into an already existing Node chain.
-     * @param value: Value to be inserted in the Node Chain
-     * @param index: index the Key owner of value is mapped to.
-     * @param key: key owner of the value.
-     */
     private void insertNode(V value, int index, Key<K> key) {}
 
-    /**
-     * Function to add the key to the the set, if the key already is in the set, increment the number of values the key points to.
-     *
-     * @param key: Key to be added.
-     */
     private void addKey(Key<K> key) {}
 
-    /***
-     * Function returns all the values in the values array which are mapped to the passed key.
-     * @param key: Key of values.
-     * @return: ArrayList of values which belong to that key. Returns empty array if key not found.
-     */
     public ArrayList<V> values(K key) {}
 
-    /***
-     * Utility function to return the first value attached to the key.
-     * @param key: Key owner of the value
-     * @return: Value type first value found for the Key, returns empty array if not found.
-     */
     @Override
     public V get(Object key) {}
 
-    /***
-     * Utility Function to check the the passed value is currently in the hash map.
-     * @param value: value to check for.
-     * @return: true if the value was found, false otherwise.
-     */
     @Override
     public boolean containsValue(Object value) {}
 
-    /***
-     * Read the current Load on the HashMap.
-     * @return: current load on the hashmap.
-     */
     public double getCurrentLoad() {}
 
-    /**
-     * Get the current number of slots filled on the map.
-     * @return: filledSlots.
-     */
     public int getFilledSlots() {}
 
-    /***
-     * Get the current load factor used when deciding when to auto expand the hash map.
-     * @return: current load factor (value between 0 and 1).
-     */
     public double getLoadFactor() {}
 
-    /***
-     * Update the current load factor..
-     * @param loadFactor: new load factor values, values between (0 and 1) expected.
-     */
     public void setLoadFactor(double loadFactor) {}
 
-    /***
-     * Creates a string version of the Map.
-     * @return: returns string representation of the map.
-     */
     @Override
     public String toString() {}
 }
