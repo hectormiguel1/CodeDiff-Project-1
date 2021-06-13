@@ -220,7 +220,7 @@ Now we move on to our methods, be warned there are a few of them.
 #### hashCode
 
 Generates the hashcode for the key. For this example implementation we are keeping it simple and adding up the values 
-of the ``.toString()`` characters.
+of the `.toString()` characters.
 
 ```java
     @Override
@@ -315,7 +315,7 @@ Takes in a Key object and compares to another Key. Returns an Integer < 0 if oth
 
 #### toString
 
-String representation of the Key, returns the Stringified version of the object.
+Creates a string representation of the Key, returns the Stringified version of the object.
 
 ```java
     @Override
@@ -359,8 +359,7 @@ Sets the next Node in the Link.
 
 #### getNextValue
 
-Returns the value which follows this one, when they are mapped to the same location. Returns the next that was mapped to
-this same index.
+Returns the value which follows this one, when they are mapped to the same location. 
 
 
 ```java
@@ -698,7 +697,7 @@ Utility Function to remove a node from values array.
 #### remove
 
 Function used to remove the key from the Hash Map, this will also remove all the Values associated with that key.
-Returns the first value attacked to the key. All items are removed though.
+Returns the first value attached to the key. All items are removed though.
 
 ```java
     public V remove(Object key) {
@@ -937,11 +936,9 @@ Returns a string representation of the map.
     }
 ```
 
+---
+
 ## Demonstration
-Demonstrate the usage of the Data Structure with a few examples
+### Demonstrate the usage of the Data Structure with a few examples
 
-
-You can build your tutorial with the tool of your choosing so long as you can show text, code, images, etc. We reccomend using a markdown file but a website or Word document will also work.
-
-Presentation
-You will give a short presintation to the rest of the class. Here you will explain all about your Data Structure and provide a demonstration of why and how to use it.
+For our demonstration We'll be doing a live code demo
