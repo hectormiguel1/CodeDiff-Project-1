@@ -201,9 +201,11 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
 }
 ```
 
+---
+
 ## Method Implementations
 
-One method at a time, provide a decription and implement.
+Now we move on to our methods, be warned there are a few of them. 
 
 ### Key Constructor
 
@@ -214,11 +216,13 @@ One method at a time, provide a decription and implement.
 ```
 
 ### Key Methods
+
+#### hashCode
+
+Generates the hashcode for the key. For this example implementation we are keeping it simple and adding up the values 
+of the ``.toString()`` characters.
+
 ```java
-    /***
-     * Generates the hashcode for the key.
-     * For this example implementation we are keeping it simple and adding up the values of the .toString() characters.
-     */
     @Override
     public int hashCode() {
         char[] characters = key.toString().toCharArray();
@@ -231,52 +235,51 @@ One method at a time, provide a decription and implement.
         return total;
     }
 ```
-    
+
+#### setMappingIndex
+Setter for the mappingIndex 
+
 ```java
-    /**
-     * Setter for the mappingIndex
-     * @param mappingIndex: new mapping index.
-     */
     public void setMappingIndex(int mappingIndex) {
         this.mappingIndex = mappingIndex;
     }
 ```
 
+#### getMappingIndex
+
+Getter for the currentMapping index. Returns the current location the key points to.
+
 ```java
-    /***
-     * Getter for the currentMapping index.
-     * @return: Integer, the current location the key points to.
-     */
     public int getMappingIndex() {
         return mappingIndex;
     }
 ```
 
+#### getNumItemsMapped
+
+Getter for the number of items the key points to. Returns number of items the key points to.
+
 ```java
-    /**
-     * Getter for the number of items the key points to.
-     * @return: Integer number of items the key points to.
-     */
     public int getNumItemsMapped() {
         return numItemsMapped;
     }
 ```
 
+#### incrementItemsMapped
+
+Increments the number of items the key points to.
+
 ```java
-    /**
-     * Increments the number of items the key points to.
-     */
     public void incrementItemsMapped() {
         numItemsMapped++;
     }
 ```
 
+#### equals
+
+Compares the current instance of Key to another Object. Returns true if objects are equal, false otherwise.
+
 ```java
-    /***
-     * Compares the current instance of Key to another Object.
-     * @param o: Other Object.
-     * @return: True if objects are equal, false otherwise.
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -289,33 +292,32 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### getKey
+
+Getter for the Key Object. Returns the Internal Key object.
+
 ```java
-    /**
-     * Getter for the Key Object
-     * @return: returns the Internal Key object.
-     */
     public K getKey() {
         return key;
     }
 ```
 
+#### compareTo
+
+Takes in a Key object and compares to another Key. Returns an Integer < 0 if other key has higher hashCode, 0 if same, > 0 if lower than.
+
 ```java
-    /**
-     * Used to compare one Key to another Key
-     * @param otherKey: Key to compare against.
-     * @return Integer  < 0 if other key has higher hashCode, 0 if same, > 0 if lower than.
-     */
     @Override
     public int compareTo(@NotNull Key<K> otherKey) {
         return this.hashCode() - otherKey.hashCode();
     }
 ```
 
+#### toString
+
+String representation of the Key, returns the Stringified version of the object.
+
 ```java
-    /**
-     * String representation of the Key
-     * @return Stringified version of the object.
-     */
     @Override
     public String toString() {
         return "\n\t\tKey{" +
@@ -334,52 +336,56 @@ One method at a time, provide a decription and implement.
 ```
 
 ### Node Methods
+
+#### getValue
+
+Getter for Values.
+
 ```java
-    /***
-     * Getter for Values
-     * @return: Returns the value currently stored in the Node.
-     */
     public V getValue() {
         return this.value;
     }
 ```
 
+#### setNextValue
+
+Sets the next Node in the Link.
+
 ```java
-    /**
-     * Sets the next Node in the Link
-     * @param nextValue: the next Node in the Link.
-     */
     public void setNextValue(Node<V> nextValue) {
         this.nextValue = nextValue;
     }
 ```
 
+#### getNextValue
+
+Returns the value which follows this one, when they are mapped to the same location. Returns the next that was mapped to
+this same index.
+
+
 ```java
-    /***
-     * Returns the value which fallows this one, when they are mapped to the same location.
-     * @return: Returns the next that was mapped to this same index.
-     */
     public Node<V> getNextValue() {
         return this.nextValue;
     }
 ```
 
+#### getKeyObject
+
+Getter for the Node Key Object.
+Returns the Key to which this value belongs to.
+
 ```java
-    /**
-     * Getter for the Node Key Object.
-     * @return: Returns the Key to which this value belongs to.
-     */
     public Key<?> getKeyObject() {
         return this.key;
     }
-```    
+```
+
+#### equals
+
+Compares this object to another object.
+Returns true if objects are equals, false otherwise.
 
 ```java
-    /**
-     * Compare this object to another object.
-     * @param o : Object to compare against.
-     * @return: true of objects are equals, false otherwise.
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -391,22 +397,22 @@ One method at a time, provide a decription and implement.
     }
 ```    
 
+#### hashCode
+
+Used to overwrite the Object `hashCode()` returns Hashcode for our value.
+
 ```java
-    /***
-     * Used to overwrite the Object hashCode()
-     * @return: Hashcode for our value.
-     */
     @Override
     public int hashCode() {
         return value.hashCode();
     }
 ```
 
+#### toString
+
+Used to convert Object to string format returns string version of the object.
+
 ```java
-    /**
-     * Used to convert Object to string format.
-     * @return: String version of the object.
-     */
     @Override
     public String toString() {
         return "\n\t\tNode{" +
@@ -416,11 +422,11 @@ One method at a time, provide a decription and implement.
     }
 ```    
 
+#### setKey
+
+Used to set the key this object belongs to.
+
 ```java
-    /**
-     * Used to set the key this object belongs to.
-     * @param key: parent Key.
-     */
     public void setKey(Key<?> key) {
         this.key = key;
     }
@@ -448,15 +454,19 @@ One method at a time, provide a decription and implement.
 ```
 
 ### HashMap Methods
+
+#### initArray
+
+Used to initialize the internal array structure which holds the values.
+
 ```java
-    /***
-     * Used to initialize the internal array structure which holds the values.
-     * @param initSize: Initial size of the array.
-     */
     private void initArray(int initSize) {
         values = (Node<V>[]) new Node<?>[initSize];
     }
 ```
+#### size
+
+Returns the number of filled slots.
 
 ```java
     @Override
@@ -465,6 +475,10 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### isEmpty
+
+Returns true if no slots have been filled.
+
 ```java
     @Override
     public boolean isEmpty() {
@@ -472,13 +486,14 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### resize
+
+This function is in charge of resizing the internal array which hold the values linkedLists.
+We do this by coping our current values into an old array, then resize the new array to be twice the size
+it currently is, then we iterate through each node in the old values array and reinsert them into the new values
+array.
+
 ```java
-    /***
-     * Function is un charge of resizing the internal array which hold the values linkedLists.
-     * We do this by coping our current values into an old array, then resize the new array to be twice the size
-     * it currently is, then we iterate through each node in the old values array and reinsert them into the new values
-     * array.
-     */
     private void resize() {
         //Copy values into tmp array
         Node<V>[] oldArr = Arrays.copyOf(values, values.length);
@@ -514,12 +529,11 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### keySet
+
+Returns all the keys currently in the hash map
+
 ```java
-    /**
-     * Returns all they keys currently in the hash map
-     *
-     * @return: ArrayList containing Keys.
-     */
     @Override
     public Set<K> keySet() {
         TreeSet<K> returnKeys = new TreeSet<>();
@@ -528,39 +542,35 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### containsKey
+
+Utility function to check if the current key is already in the hash map.
+Returns true if key is present, false otherwise.
+
 ```java
-    /**
-     * Utility function to check if the current key is already in the hash map.
-     *
-     * @param key: Key to test for.
-     * @return True if key is present, false otherwise.
-     */
     @Override
     public boolean containsKey(Object key) {
         return keys.contains(new Key<>(key));
     }
 ```
 
+#### getMapping
+
+Function maps the hashcode for they key to an index in the values array.
+Returns an Index the Key maps to.
+
 ```java
-    /**
-     * Function maps the hashcode for they key to an index in the values array.
-     *
-     * @param key: Key to get mapping for.
-     * @return: Index the Key maps to.
-     */
     private int getMapping(Key<K> key) {
         //Does Modulo with Values Length
         return (key.hashCode() % (values.length));
     }
 ```
 
+#### values
+
+Function returns all the values currently in the hash Map, these values are returned in their order.
+
 ```java
-    /**
-     * Function returns all they values currently in the hash Map, these values are return in their order,
-     * IE all nodes in index 0, then all nodes in index 1, .......
-     *
-     * @return: ArrayList of Values.
-     */
     @Override
     public ArrayList<V> values() {
         ArrayList<V> returnValues = new ArrayList<>();
@@ -580,6 +590,10 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### entrySet
+
+Returns a set containing Key - Value pairs.
+
 ```java
     @NotNull
     @Override
@@ -595,13 +609,11 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### put
+
+Function used to add keys and values to the hash map.
+
 ```java
-    /**
-     * Function used to add keys and values to the hash map.
-     *
-     * @param key:   key the value belongs to.
-     * @param value: value to be inserted.
-     */
     public V put(K key, V value) {
         //Check the current load of the the map
         double currentLoad = filledSlots / (double) values.length;
@@ -633,12 +645,11 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### removeNode
+
+Utility Function to remove a node from values array.
+
 ```java
-    /**
-     * Utility Function to remove a node from values array.
-     *
-     * @param key: Key owner of the node to remove.
-     */
     private void removeNode(Key<K> key) {
         //Check if the node is at the surface and there are no nodes after the surface node.
         if (values[key.getMappingIndex()].getKeyObject().equals(key) && values[key.getMappingIndex()].getNextValue() == null) {
@@ -684,12 +695,12 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### remove
+
+Function used to remove the key from the Hash Map, this will also remove all the Values associated with that key.
+Returns the first value attacked to the key. All items are removed though.
+
 ```java
-    /***
-     * Function used to remove the key from the Hash Map, this will also remove all the Values associated with that key.
-     * @param key : Key to remove from Hash Map.
-     * @return: the first value attacked to the key. All items are removed though.
-     */
     public V remove(Object key) {
         //Hold on to the key we need to remove, Using arraylist to get around local variables and lambda expression limitations
         ArrayList<Key<K>> keysToRemove = new ArrayList<>();
@@ -708,12 +719,20 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### putAll
+
+Adds Keys and Values from a map into the hash
+
 ```java
     @Override
     public void putAll(@NotNull Map<? extends K, ? extends V> m) {
         m.forEach(this::put);
     }
 ```
+
+#### clear
+
+Resets the Hash map clearing out all keys and values. 
 
 ```java
     @Override
@@ -723,13 +742,11 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### insertNode
+
+Function used when inserting a node into an already existing Node chain.
+
 ```java
-    /***
-     * Function used when inserting a node into an already existing Node chain.
-     * @param value: Value to be inserted in the Node Chain
-     * @param index: index the Key owner of value is mapped to.
-     * @param key: key owner of the value.
-     */
     private void insertNode(V value, int index, Key<K> key) {
         //Create Node from value
         Node<V> newNode = new Node<>(value);
@@ -747,12 +764,11 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### addKey
+
+Function to add the key to the set, if the key already is in the set, increment the number of values the key points to.
+
 ```java
-    /**
-     * Function to add the key to the the set, if the key already is in the set, increment the number of values the key points to.
-     *
-     * @param key: Key to be added.
-     */
     private void addKey(Key<K> key) {
         //Increment items mapped, a key will always point to at least one value
         key.incrementItemsMapped();
@@ -772,12 +788,11 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### values
+
+Function returns all the values in the values array which are mapped to the passed key.
+
 ```java
-    /***
-     * Function returns all the values in the values array which are mapped to the passed key.
-     * @param key: Key of values.
-     * @return: ArrayList of values which belong to that key. Returns empty array if key not found.
-     */
     public ArrayList<V> values(K key) {
         Key<K> _key = new Key<>(key);
         int index = getMapping(_key);
@@ -811,24 +826,23 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### get
+
+Utility function to return the first value attached to the key.
+
 ```java
-    /***
-     * Utility function to return the first value attached to the key.
-     * @param key: Key owner of the value
-     * @return: Value type first value found for the Key, returns empty array if not found.
-     */
     @Override
     public V get(Object key) {
         return new LinkedList<>(values((K) key)).getFirst();
     }
 ```
 
+#### containsValue
+
+Utility Function to check the passed value is currently in the hash map.
+Returns true if the value was found, false otherwise.
+
 ```java
-    /***
-     * Utility Function to check the the passed value is currently in the hash map.
-     * @param value: value to check for.
-     * @return: true if the value was found, false otherwise.
-     */
     @Override
     public boolean containsValue(Object value) {
         //Iterate over the values.
@@ -859,41 +873,44 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### getCurrentLoad
+
+Reads the current Load on the HashMap.
+Returns the current load on the hashmap.
+
 ```java
-    /***
-     * Read the current Load on the HashMap.
-     * @return: current load on the hashmap.
-     */
     public double getCurrentLoad() {
         return filledSlots / (double) values.length;
     }
 ```
 
+#### getFilledSlots
+
+Gets the current number of slots filled on the map.
+Returns filledSlots.
+
 ```java
-    /**
-     * Get the current number of slots filled on the map.
-     * @return: filledSlots.
-     */
     public int getFilledSlots() {
         return filledSlots;
     }
 ```
 
+#### getLoadFactor
+
+Get the current load factor used when deciding when to auto expand the hash map.
+Returns the current load factor (value between 0 and 1).
+
 ```java
-    /***
-     * Get the current load factor used when deciding when to auto expand the hash map.
-     * @return: current load factor (value between 0 and 1).
-     */
     public double getLoadFactor() {
         return loadFactor;
     }
 ```
 
+#### setLoadFactor
+
+Updates the current load factor.
+
 ```java
-    /***
-     * Update the current load factor..
-     * @param loadFactor: new load factor values, values between (0 and 1) expected.
-     */
     public void setLoadFactor(double loadFactor) {
        if(loadFactor < 1 && loadFactor > 0) {
            this.loadFactor = loadFactor;
@@ -901,11 +918,12 @@ One method at a time, provide a decription and implement.
     }
 ```
 
+#### toString
+
+Creates a string version of the Map.
+Returns a string representation of the map.
+
 ```java
-    /***
-     * Creates a string version of the Map.
-     * @return: returns string representation of the map.
-     */
     @Override
     public String toString() {
         return "HashMap{" +
