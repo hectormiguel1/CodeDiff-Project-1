@@ -161,6 +161,12 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>>{
         Key<K> newKey = new Key<>(key);
         int mappingIndex = getMapping(newKey);
         newKey.setMappingIndex(mappingIndex);
+        for (Key<K> element : keys) {
+            if (element.getKey().equals(key)) {
+                newKey = element;
+            }
+        }
+        mappingIndex = newKey.getMappingIndex();
         //Check if the new value can be inserted as a surface node, if fo insert it as a surface node.
         if (values[mappingIndex] == null) {
             //Wrap the value in a Node of the Value type.
@@ -175,7 +181,9 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>>{
         //Increase number slots filled in the map.
         filledSlots++;
         //add the new key to the key set.
-        addKey(newKey);
+        if(!containsKey(newKey)) {
+            addKey(newKey);
+        }
 
         return value;
     }

@@ -202,11 +202,19 @@ public class HashMapTest {
     }
     @Test
     public void testContainsValueOnNonEmpty() {
-        String value = "Test";
-        testMap.put("Hello", value);
+        HashMap<Integer, String> testMap = new HashMap<>();
+        ArrayList<Integer> keys = new ArrayList<>();
+        keys.add(1);
+        keys.add(1);
+        ArrayList<String> values = new ArrayList<>();
+        values.add("Value1");
+        values.add("Value2");
+        for(int index = 0; index < keys.size(); index++) {
+            testMap.put(keys.get(index), values.get(index));
+        }
         boolean expected = true;
-        boolean actual = testMap.containsValue(value);
-        Assert.assertEquals(actual, expected);
+        boolean actual = testMap.containsValue("Value1");
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
