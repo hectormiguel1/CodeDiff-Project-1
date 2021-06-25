@@ -3,7 +3,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implements Map<K,V>{
+public class HashMap <K extends Comparable<K>,V extends Comparable<V>>{
     private final int INITIAL_SIZE = 16;
     private final double DEFAULT_LOAD_FACTOR = 0.65;
     private final TreeSet<Key<K>> keys = new TreeSet<>();
@@ -38,14 +38,14 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
     }
 
 
-    @Override
+
     public int size() {
         return filledSlots;
     }
 
-    @Override
+
     public boolean isEmpty() {
-        return filledSlots > 0;
+        return filledSlots == 0;
     }
 
     /***
@@ -93,7 +93,6 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
      *
      * @return: ArrayList containing Keys.
      */
-    @Override
     public Set<K> keySet() {
         TreeSet<K> returnKeys = new TreeSet<>();
         keys.forEach(key -> returnKeys.add(key.getKey()));
@@ -106,7 +105,7 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
      * @param key: Key to test for.
      * @return True if key is present, false otherwise.
      */
-    @Override
+
     public boolean containsKey(Object key) {
         return keys.contains(new Key<>(key));
     }
@@ -128,7 +127,6 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
      *
      * @return: ArrayList of Values.
      */
-    @Override
     public ArrayList<V> values() {
         ArrayList<V> returnValues = new ArrayList<>();
         for (Node<V> val : values) {
@@ -144,19 +142,6 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
             }
         }
         return returnValues;
-    }
-
-    @NotNull
-    @Override
-    public Set<Entry<K, V>> entrySet() {
-       TreeSet<Entry<K,V>> entries = new TreeSet<>();
-
-       keys.forEach((key) -> {
-           V keyFirstValue = get(key);
-           entries.add(new AbstractMap.SimpleEntry<K,V>(key.getKey(), keyFirstValue));
-       });
-
-       return entries;
     }
 
     /**
@@ -264,17 +249,13 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
         //Remove all the keys added to keys to remove list.
         keysToRemove.forEach(keys::remove);
         return returnValue;
+       // return null;
     }
 
-    @Override
-    public void putAll(@NotNull Map<? extends K, ? extends V> m) {
-        m.forEach(this::put);
-    }
-
-    @Override
     public void clear() {
         keys.clear();
-        values = (Node<V>[]) new Object[INITIAL_SIZE];
+        values = (Node<V>[]) new Node<?>[INITIAL_SIZE];
+        filledSlots = 0;
     }
 
     /***
@@ -364,9 +345,12 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
      * @param key: Key owner of the value
      * @return: Value type first value found for the Key, returns empty array if not found.
      */
-    @Override
     public V get(Object key) {
-        return new LinkedList<>(values((K) key)).getFirst();
+        try {
+            return new LinkedList<>(values((K) key)).getFirst();
+        } catch(NoSuchElementException ex) {
+            return null;
+        }
     }
 
     /***
@@ -374,7 +358,6 @@ public class HashMap <K extends Comparable<K>,V extends Comparable<V>> implement
      * @param value: value to check for.
      * @return: true if the value was found, false otherwise.
      */
-    @Override
     public boolean containsValue(Object value) {
         //Iterate over the values.
         for (var _value : values) {
